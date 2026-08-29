@@ -70,7 +70,7 @@ streamlit run app.py
 
 ### Notebook (for testing individual components)
 
-Open `notebooks/study_assistant_testing.ipynb` in Jupyter.
+Open `notebooks/study_assistant.ipynb` in Jupyter.
 
 ## Project Structure
 
