@@ -1,5 +1,4 @@
 import os
-# Set OpenMP workaround for Windows before any torch/easyocr imports
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
 import streamlit as st
@@ -18,15 +17,12 @@ from src.quiz import generate_quiz
 
 API_KEY = os.getenv("GROQ_API_KEY", "").strip()
 
-
-# ── Page Config ──────────────────────────────────────────────
 st.set_page_config(
     page_title="Study Assistant",
     page_icon="◆",
     layout="wide",
 )
 
-# ── Theme (matte black) ──────────────────────────────────────
 st.markdown("""
 <style>
     #MainMenu, footer, header {visibility: hidden;}
@@ -99,14 +95,14 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# ── Header ───────────────────────────────────────────────────
+# Header 
 st.markdown('<div class="title">Study Assistant</div>', unsafe_allow_html=True)
 st.markdown(
     '<div class="subtitle">Upload your notes and get a summary, ask questions, or test yourself with a quiz.</div>',
     unsafe_allow_html=True,
 )
 
-# ── Sidebar ──────────────────────────────────────────────────
+# Sidebar 
 with st.sidebar:
     st.markdown("**Upload material**")
     uploaded_file = st.file_uploader(
@@ -128,7 +124,7 @@ with st.sidebar:
         st.write("")
         st.caption("⚠ No GROQ_API_KEY found in .env")
 
-# ── Main Content ─────────────────────────────────────────────
+# Main Content 
 
 if "extracted_text" not in st.session_state:
     st.session_state.extracted_text = ""
@@ -137,8 +133,6 @@ if "last_uploaded_file" not in st.session_state:
 
 if uploaded_file is not None:
     file_type = uploaded_file.name.split(".")[-1].lower()
-
-    # Re-extract if new file or if previous extraction was empty
     if (
         st.session_state.last_uploaded_file != uploaded_file.name
         or not st.session_state.extracted_text
@@ -171,7 +165,7 @@ if uploaded_file is not None:
 
         st.markdown("---")
 
-        # --- Summarize ---
+        # Summarize
         if operation == "Summarize":
             if st.button("Generate summary", type="primary"):
                 if not API_KEY:
@@ -184,7 +178,7 @@ if uploaded_file is not None:
                         except Exception as e:
                             st.error(f"Summarization failed: {e}")
 
-        # --- Q&A ---
+        # Q&A
         elif operation == "Ask a Question":
             question = st.text_input(
                 "Question",
@@ -204,7 +198,7 @@ if uploaded_file is not None:
                         except Exception as e:
                             st.error(f"Couldn't get an answer: {e}")
 
-        # --- Quiz ---
+        # Quiz
         elif operation == "Generate Quiz":
             col_q, col_btn = st.columns([2, 1])
             with col_q:
